@@ -1,6 +1,7 @@
 #include "kernel/types.h"
 #include "user/user.h"
 #include "kernel/fcntl.h"
+#include <stdint.h>
 
 void memdump(char *fmt, char *data);
 
@@ -60,6 +61,48 @@ main(int argc, char *argv[])
 void
 memdump(char *fmt, char *data)
 {
-  // Your code here.
+	char *p = data;
 
+	while (*fmt) {
+		switch(*fmt){
+			case 'i':{
+				int *ip = (int *)p;
+				printf("%d\n",*ip);
+				p += 4;
+				break;
+			}
+			case 'p':{
+				uint64 *pp = (uint64 *)p;
+				printf("%lx\n", *pp);
+				p += sizeof(uint64);
+				break;
+			}
+			case 'h':{
+				short *hp = (short *)p;
+				printf("%d\n",*hp);
+				p += 2;
+				break;
+			}
+			case 'c':{
+				char *cp = (char *) p;
+				printf("%c\n",*cp);
+				p += 1;
+				break;
+			}
+			case 's':{
+				char **sp = (char **)p;
+				printf("%s\n", *sp);
+				p += 8;
+				break;
+			}
+			case 'S':{
+				printf("%s\n",p);
+				while (*p)
+					p++;
+				p++;
+				break;
+			}
+		}
+		fmt ++;
+	}
 }
